@@ -1,0 +1,9 @@
+@use '../../styles/colors.scss';
+
+.container {
+	width: 886px;
+	margin: 50px auto;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}

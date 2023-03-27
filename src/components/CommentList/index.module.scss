@@ -1,0 +1,13 @@
+@use '../../styles/colors.scss';
+
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+
+	&.reply-list {
+		margin-left: 25px;
+		padding-left: 25px;
+		border-left: 2px solid colors.$reply-list-border;
+	}
+}

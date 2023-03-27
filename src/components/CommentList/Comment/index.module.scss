@@ -1,0 +1,54 @@
+@use '../../../styles/colors.scss';
+
+.comment-container {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+}
+
+.comment-info {
+	flex-grow: 1;
+
+	.comment-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		.user-info {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+		}
+	}
+
+	p {
+		margin-top: 16px;
+		line-height: 1.5;
+		color: colors.$grayish-blue;
+		word-wrap: break-word;
+	}
+}
+
+.user-info {
+	.username {
+		color: colors.$dark-blue;
+		font-family: inherit;
+		font-size: 14px;
+		font-weight: 500;
+	}
+
+	.comment-time {
+		color: colors.$grayish-blue;
+	}
+}
+
+.action-btn {
+	background: transparent;
+	color: colors.$moderate-blue;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-family: inherit;
+	font-size: 16px;
+	font-weight: 700;
+}

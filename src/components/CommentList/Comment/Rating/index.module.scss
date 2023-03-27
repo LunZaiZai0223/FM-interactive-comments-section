@@ -1,0 +1,33 @@
+@use '../../../../styles/colors.scss';
+
+.rating-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	background-color: colors.$very-light-gray;
+	border-radius: 10px;
+	padding: 8px 12px 10px;
+	min-width: 44px;
+	align-items: center;
+
+	span {
+		font-family: inherit;
+		font-size: 16px;
+		font-weight: 700;
+		color: colors.$moderate-blue;
+	}
+
+	.btn {
+		background: transparent;
+		padding: 0;
+
+		&:hover {
+			svg {
+				path {
+					fill: colors.$moderate-blue;
+				}
+			}
+		}
+	}
+
+}

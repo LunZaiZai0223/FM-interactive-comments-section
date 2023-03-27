@@ -1,0 +1,10 @@
+@use '../../styles/colors.scss';
+
+.btn {
+	border: none;
+	background-color: colors.$moderate-blue;
+	border-radius: 5px;
+	color: colors.$white;
+	padding: 12px 24px;
+	cursor: pointer;
+}

@@ -1,0 +1,7 @@
+@use '../../styles/colors.scss';
+
+.card {
+	padding: 20px;
+	background-color: hsl(0, 0%, 100%);
+	border-radius: 5px;
+}

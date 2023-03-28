@@ -1,4 +1,5 @@
 @use '../../styles/colors.scss';
+@use '../../styles/breakpoints.scss';
 
 .container {
 	display: flex;
@@ -9,5 +10,14 @@
 		margin-left: 25px;
 		padding-left: 25px;
 		border-left: 2px solid colors.$reply-list-border;
+	}
+}
+
+@media(max-width: breakpoints.$mobile) {
+	.container {
+		&.reply-list {
+		margin-left: 2px;
+		padding-left: 18px;
+		}
 	}
 }

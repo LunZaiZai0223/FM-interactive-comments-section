@@ -26,14 +26,16 @@ const Comment = (props: CommentItem) => {
               <span className={s.username}>{user.username}</span>
               <span className={`${s['comment-time']}`}>{createdAt}</span>
             </div>
-            <Button
-              type="button"
-              onHandleClick={() => {}}
-              styleClasses={`${s['action-btn']}`}
-            >
-              <ReplyIcon />
-              Reply
-            </Button>
+            <div className={`${s['action-btn-wrapper']}`}>
+              <Button
+                type="button"
+                onHandleClick={() => {}}
+                styleClasses={`${s['action-btn']}`}
+              >
+                <ReplyIcon />
+                Reply
+              </Button>
+            </div>
           </div>
           <p>{content}</p>
         </div>

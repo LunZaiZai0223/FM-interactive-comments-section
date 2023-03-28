@@ -1,9 +1,16 @@
 @use '../../styles/colors.scss';
+@use '../../styles/breakpoints.scss';
 
 .container {
-	width: 886px;
+	max-width: 886px;
 	margin: 50px auto;
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
+}
+
+@media(max-width: breakpoints.$mobile) {
+	.container {
+		padding: 0 16px;
+	}
 }

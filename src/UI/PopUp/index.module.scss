@@ -1,0 +1,58 @@
+@use '../../styles/colors.scss';
+@use '../../styles/breakpoints.scss';
+
+.popup-container {
+	width: 45%;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 20;
+	background-color: hsl(0, 0%, 100%);
+	padding: 24px;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.header {
+	display: block;
+	font-weight: 500;
+	font-size: 22px;
+	font-family: inherit;
+}
+
+.content {
+	line-height: 1.5;
+	color: colors.$grayish-blue;
+}
+
+.action-btn-wrapper {
+	display: flex;
+	gap: 12px;
+
+	button {
+		font-weight: 600;
+		flex-grow: 1;
+		transition: opacity .2s;
+
+		&:hover {
+			opacity: .65;
+		}
+	}
+}
+
+.info {
+	background-color: colors.$grayish-blue;
+}
+
+.danger {
+	background-color: colors.$soft-red;
+}
+
+@media(max-width: breakpoints.$mobile) {
+	.popup-container {
+		width: 90%;
+	}
+}

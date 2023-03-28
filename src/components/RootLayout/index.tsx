@@ -1,6 +1,7 @@
 // components
 import CommentInputArea from '../CommentInputArea';
 import CommentList from '../CommentList';
+import Popup from '../../UI/PopUp';
 
 import s from './index.module.scss';
 
@@ -37,6 +38,7 @@ const RootLayout = () => {
     <main className={s.container}>
       <CommentList commentList={commentList} />
       <CommentInputArea />
+      <Popup />
     </main>
   );
 };

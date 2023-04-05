@@ -1,0 +1,15 @@
+@use '../../../../styles/colors.scss';
+@use '../../../../styles/breakpoints.scss';
+
+.content {
+	line-height: 1.5;
+	color: colors.$grayish-blue;
+	word-wrap: break-word;
+
+	.reply-to {
+		color: colors.$moderate-blue;
+		font-family: inherit;
+		font-size: inherit;
+		font-weight: 700;
+	}
+}

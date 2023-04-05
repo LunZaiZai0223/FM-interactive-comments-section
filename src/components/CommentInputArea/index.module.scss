@@ -1,42 +1,7 @@
 @use '../../styles/colors.scss';
 
-.form {
+.form-wrapper {
 	display: flex;
 	align-items: flex-start;
 	gap: 16px;
-
-	.avatar-wrapper {
-		width: 30px;
-		height: 30px;
-
-		.avatar {
-			display: block;
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-		}
-	}
-
-	textarea {
-		flex-grow: 1;
-		height: 100px;
-		outline: none;
-		padding: 16px;
-		font-size: inherit;
-		font-family: inherit;
-		border: 2px solid colors.$light-gray;
-		border-radius: 10px;
-		resize: none;
-
-		&::placeholder {
-			color: colors.$grayish-blue;
-			font-family: inherit;
-			font-size: 14px;
-		}
-
-		&:hover,
-		&:focus {
-			border-color: colors.$moderate-blue;
-		}
-	}
 }

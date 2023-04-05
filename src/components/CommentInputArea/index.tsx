@@ -1,28 +1,42 @@
 // components
-import Button from '../../UI/Button';
 import Card from '../../UI/Card';
 import Avatar from '../../UI/Avatar';
+import CommentInput from './CommentInput';
 
 // style
 import s from './index.module.scss';
 
-const CommentInputArea = () => {
+interface Props {
+  styleClasses?: string;
+  isReplying?: boolean;
+  replyToUser?: string;
+  targetCommentId?: number;
+  onRemoveReplyId?: Function;
+  commentReducerFunc: Function;
+}
+
+const CommentInputArea = (props: Props) => {
+  const {
+    styleClasses = '',
+    isReplying,
+    commentReducerFunc,
+    replyToUser,
+    targetCommentId,
+    onRemoveReplyId,
+  } = props;
+
   return (
-    <Card>
-      <form className={s.form}>
+    <Card styleClasses={styleClasses}>
+      <div className={`${s['form-wrapper']}`}>
         <Avatar userName="juliusomo" />
-        {/* <div className={`${s['avatar-wrapper']}`}>
-          <img
-            src={getUserAvatar('juliusomo')}
-            alt="author avatar"
-            className={s.avatar}
-          ></img>
-        </div> */}
-        <textarea placeholder="Add a comment..."></textarea>
-        <Button type="submit" onHandleClick={() => {}}>
-          SEND
-        </Button>
-      </form>
+        <CommentInput
+          isReplying={isReplying}
+          commentReducerFunc={commentReducerFunc}
+          replayToUser={replyToUser}
+          targetCommentId={targetCommentId}
+          onRemoveReplyId={onRemoveReplyId}
+        />
+      </div>
     </Card>
   );
 };

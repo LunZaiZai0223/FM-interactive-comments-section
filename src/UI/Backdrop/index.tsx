@@ -2,13 +2,15 @@
 import s from './index.module.scss';
 
 interface Props {
-  children?: React.ReactNode;
+  onTogglePopup: Function;
 }
 
 const Backdrop = (props: Props) => {
-  const { children } = props;
+  const { onTogglePopup } = props;
 
-  return <div className={s['back-drop']}>{children}</div>;
+  return (
+    <div className={s['back-drop']} onClick={() => onTogglePopup(false)}></div>
+  );
 };
 
 export default Backdrop;

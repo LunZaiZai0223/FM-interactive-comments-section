@@ -1,4 +1,5 @@
 @use '../../styles/colors.scss';
+@use '../../styles/breakpoints.scss';
 
 .btn {
 	border: none;
@@ -7,4 +8,16 @@
 	color: colors.$white;
 	padding: 12px 24px;
 	cursor: pointer;
+	transition: opacity .2s;
+
+	&:hover {
+		opacity: .65;
+	}
+}
+
+@media(max-width: breakpoints.$mobile) {
+	.btn {
+		padding: 6px 14px;
+	}
+
 }

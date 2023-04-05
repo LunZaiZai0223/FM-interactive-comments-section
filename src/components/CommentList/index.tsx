@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 
 // components
 import Comment from './Comment';
@@ -11,13 +11,16 @@ import { CommentItem } from '../RootLayout';
 
 interface Props {
   commentList: CommentItem[];
+  currentUsername: string;
   isNested?: boolean;
+  commentReducerFunc: Function;
 }
 
 const CommentList = (props: Props) => {
-  const { commentList, isNested } = props;
+  const { commentList, isNested, currentUsername, commentReducerFunc } = props;
+  const [popupIsActivated, setPopupIsActivated] = useState<boolean>(false);
+  const [replyingIds, setReplyingIds] = useState<number[]>([]);
 
-  // TODO: 用遞迴處理巢狀 comment -> reply
   return (
     <section className={`${s.container} ${isNested ? s['reply-list'] : ''}`}>
       {commentList.map((comment) => {
@@ -26,12 +29,36 @@ const CommentList = (props: Props) => {
           return (
             // Fragment 可以塞 key，避免觸發 key 必須不同的錯誤
             <Fragment key={id}>
-              <Comment {...comment} />
-              <CommentList commentList={replies} isNested />
+              <Comment
+                {...comment}
+                currentUsername={currentUsername}
+                popupState={popupIsActivated}
+                replyingIds={replyingIds}
+                onTogglePopup={setPopupIsActivated}
+                onSetReplyingIds={setReplyingIds}
+                commentReducerFunc={commentReducerFunc}
+              />
+              <CommentList
+                commentList={replies}
+                isNested
+                currentUsername={currentUsername}
+                commentReducerFunc={commentReducerFunc}
+              />
             </Fragment>
           );
         } else {
-          return <Comment key={`${id}-comment`} {...comment} />;
+          return (
+            <Comment
+              key={`${id}-comment`}
+              {...comment}
+              currentUsername={currentUsername}
+              popupState={popupIsActivated}
+              replyingIds={replyingIds}
+              onTogglePopup={setPopupIsActivated}
+              onSetReplyingIds={setReplyingIds}
+              commentReducerFunc={commentReducerFunc}
+            />
+          );
         }
       })}
     </section>

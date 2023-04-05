@@ -1,5 +1,7 @@
 import { useCallback, useState } from 'react';
 
+import { formatDistanceToNow } from 'date-fns';
+
 // components
 import Card from '../../../UI/Card';
 import Button from '../../../UI/Button';
@@ -89,7 +91,11 @@ const Comment = (props: Props) => {
                 {isCurrentUser(user.username) && (
                   <span className={s['current-user-hit']}>you</span>
                 )}
-                <span className={`${s['comment-time']}`}>{createdAt}</span>
+                <span className={`${s['comment-time']}`}>
+                  {typeof createdAt === 'number'
+                    ? formatDistanceToNow(createdAt)
+                    : createdAt}
+                </span>
               </div>
               <div className={`${s['action-btn-wrapper']}`}>
                 {isCurrentUser(user.username) ? (

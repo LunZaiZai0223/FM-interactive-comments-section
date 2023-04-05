@@ -22,7 +22,7 @@ export interface Score {
 
 export interface CommentItem extends Score {
   content: string;
-  createdAt: string;
+  createdAt: string | number;
   id: number;
   user: User;
   replies?: Reply[];
@@ -36,7 +36,9 @@ interface Action {
   payload: any;
 }
 
-const COMMENTS = JSON.parse(JSON.stringify(data.comments));
+const COMMENTS =
+  JSON.parse(localStorage.getItem('comments')!) ??
+  JSON.parse(JSON.stringify(data.comments));
 const CURRENT_USERNAME = JSON.parse(JSON.stringify(data.currentUser.username));
 
 const generateComment = ({
@@ -52,7 +54,7 @@ const generateComment = ({
     id: Math.floor(Date.now() / 100),
     content: enteredContent,
     replyingTo,
-    createdAt: '1 month ago',
+    createdAt: new Date().getTime(),
     score: 0,
     user: {
       image: {
@@ -65,9 +67,14 @@ const generateComment = ({
   };
 };
 
+const setLocalStorage = (key: string, value: CommentItem[]) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
+
 const reducerFunc = (state: CommentItem[], action: Action): CommentItem[] => {
   const { type, payload = {} } = action;
   const { targetCommentId, enteredContent, replyingTo } = payload;
+  let result: undefined | CommentItem[];
 
   switch (type) {
     case 'DELETE_COMMENT':
@@ -92,7 +99,9 @@ const reducerFunc = (state: CommentItem[], action: Action): CommentItem[] => {
           return true;
         });
       };
-      return deleteById(state, targetCommentId);
+      result = deleteById(state, targetCommentId);
+      setLocalStorage('comments', result!);
+      return result!;
 
     case 'INCREASE_SCORE':
       const increaseScoreById = (
@@ -126,7 +135,9 @@ const reducerFunc = (state: CommentItem[], action: Action): CommentItem[] => {
 
         // return data;
       };
-      return increaseScoreById(state, targetCommentId);
+      result = increaseScoreById(state, targetCommentId);
+      setLocalStorage('comments', result!);
+      return result!;
 
     case 'DECREASE_SCORE':
       const decreaseScoreById = (
@@ -144,11 +155,15 @@ const reducerFunc = (state: CommentItem[], action: Action): CommentItem[] => {
           }
         });
       };
-      return decreaseScoreById(state, targetCommentId);
+      result = decreaseScoreById(state, targetCommentId);
+      setLocalStorage('comments', result!);
+      return result!;
 
     case 'ADD_COMMENT':
       const newComment = generateComment({ isParent: true, enteredContent });
-      return [...state, newComment];
+      result = [...state, newComment];
+      setLocalStorage('comments', result);
+      return result;
 
     case 'EDIT_COMMENT':
       const updateById = (data: CommentItem[], targetCommentId: number) => {
@@ -163,7 +178,9 @@ const reducerFunc = (state: CommentItem[], action: Action): CommentItem[] => {
           }
         });
       };
-      return updateById(state, targetCommentId);
+      result = updateById(state, targetCommentId);
+      setLocalStorage('comments', result);
+      return result;
 
     case 'REPLY_COMMENT':
       const newReply = generateComment({ enteredContent, replyingTo });
@@ -201,7 +218,9 @@ const reducerFunc = (state: CommentItem[], action: Action): CommentItem[] => {
 
         return updatedCommentList;
       };
-      return replyById(state, targetCommentId);
+      result = replyById(state, targetCommentId);
+      setLocalStorage('comments', result!);
+      return result!;
 
     default:
       return state;

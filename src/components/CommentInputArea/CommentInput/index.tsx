@@ -80,7 +80,11 @@ const CommentInput = (props: Props) => {
         placeholder={placeHolderText}
         ref={enteredContentEle}
       ></textarea>
-      <Button type="submit" onHandleClick={() => {}}>
+      <Button
+        type="submit"
+        onHandleClick={() => {}}
+        styleClasses={`${s['submit-btn']}`}
+      >
         {btnText}
       </Button>
     </form>

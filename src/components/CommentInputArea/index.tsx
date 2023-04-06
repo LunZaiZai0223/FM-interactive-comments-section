@@ -28,7 +28,7 @@ const CommentInputArea = (props: Props) => {
   return (
     <Card styleClasses={styleClasses}>
       <div className={`${s['form-wrapper']}`}>
-        <Avatar userName="juliusomo" />
+        <Avatar userName="juliusomo" styleClasses={`${s['mobile-avatar']}`} />
         <CommentInput
           isReplying={isReplying}
           commentReducerFunc={commentReducerFunc}

@@ -93,7 +93,7 @@ const Comment = (props: Props) => {
                 )}
                 <span className={`${s['comment-time']}`}>
                   {typeof createdAt === 'number'
-                    ? formatDistanceToNow(createdAt)
+                    ? `${formatDistanceToNow(createdAt)} ago`
                     : createdAt}
                 </span>
               </div>

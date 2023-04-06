@@ -6,12 +6,13 @@ import s from './index.module.scss';
 
 interface Props {
   userName: string;
+  styleClasses?: string;
 }
 
 const Avatar = (props: Props) => {
-  const { userName } = props;
+  const { userName, styleClasses } = props;
   return (
-    <div className={`${s['avatar-wrapper']}`}>
+    <div className={`${s['avatar-wrapper']} ${styleClasses || ''}`}>
       <img
         src={getUserAvatar(userName)}
         alt={`${userName}'s avatar`}

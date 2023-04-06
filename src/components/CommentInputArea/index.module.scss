@@ -1,7 +1,19 @@
 @use '../../styles/colors.scss';
+@use '../../styles/breakpoints.scss';
 
 .form-wrapper {
 	display: flex;
 	align-items: flex-start;
 	gap: 16px;
+}
+
+@media(max-width: breakpoints.$mobile) {
+	.form-wrapper {
+		flex-direction: column;
+    position: relative;
+
+		.mobile-avatar {
+			order: 2;
+		}
+	}
 }

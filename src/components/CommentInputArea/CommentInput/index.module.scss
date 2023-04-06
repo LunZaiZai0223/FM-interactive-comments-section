@@ -55,6 +55,19 @@
 
 @media(max-width: breakpoints.$mobile) {
 	.form {
-		width: 80%
+		width: 100%;
+
+		.submit-btn {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			padding: 10px 20px;
+		}
+	}
+
+	.form.form-is-editing {
+		.submit-btn {
+			position: unset;
+		}
 	}
 }

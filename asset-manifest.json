@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/FM-interactive-comments-section/static/css/main.12d4efb5.css",
+    "main.js": "/FM-interactive-comments-section/static/js/main.f4d93d9e.js",
+    "static/js/787.6cd58c6b.chunk.js": "/FM-interactive-comments-section/static/js/787.6cd58c6b.chunk.js",
+    "index.html": "/FM-interactive-comments-section/index.html",
+    "static/media/icon-plus.svg": "/FM-interactive-comments-section/static/media/icon-plus.0037a825a550965779412c2890bd328b.svg",
+    "static/media/icon-edit.svg": "/FM-interactive-comments-section/static/media/icon-edit.b0c7f9ebaec367bd3ae2539df8b55ff9.svg",
+    "static/media/icon-reply.svg": "/FM-interactive-comments-section/static/media/icon-reply.bfb4589d45cd96abd45e3b82f7e7bbc6.svg",
+    "static/media/icon-minus.svg": "/FM-interactive-comments-section/static/media/icon-minus.4aa6933cb1575b3c54fa67d84a61efaf.svg",
+    "static/media/icon-delete.svg": "/FM-interactive-comments-section/static/media/icon-delete.86cedbf2e37529f9c8f1f744254059b0.svg",
+    "main.12d4efb5.css.map": "/FM-interactive-comments-section/static/css/main.12d4efb5.css.map",
+    "main.f4d93d9e.js.map": "/FM-interactive-comments-section/static/js/main.f4d93d9e.js.map",
+    "787.6cd58c6b.chunk.js.map": "/FM-interactive-comments-section/static/js/787.6cd58c6b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.12d4efb5.css",
+    "static/js/main.f4d93d9e.js"
+  ]
+}

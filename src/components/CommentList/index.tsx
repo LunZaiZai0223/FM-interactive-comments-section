@@ -7,17 +7,15 @@ import Comment from './Comment';
 import s from './index.module.scss';
 
 // interface
-import { CommentItem } from '../RootLayout';
+import { CommentItem } from '../../store/commentsSlice';
 
 interface Props {
   commentList: CommentItem[];
-  currentUsername: string;
   isNested?: boolean;
-  commentReducerFunc: Function;
 }
 
 const CommentList = (props: Props) => {
-  const { commentList, isNested, currentUsername, commentReducerFunc } = props;
+  const { commentList, isNested } = props;
   const [popupIsActivated, setPopupIsActivated] = useState<boolean>(false);
   const [replyingIds, setReplyingIds] = useState<number[]>([]);
 
@@ -31,19 +29,12 @@ const CommentList = (props: Props) => {
             <Fragment key={id}>
               <Comment
                 {...comment}
-                currentUsername={currentUsername}
                 popupState={popupIsActivated}
                 replyingIds={replyingIds}
                 onTogglePopup={setPopupIsActivated}
                 onSetReplyingIds={setReplyingIds}
-                commentReducerFunc={commentReducerFunc}
               />
-              <CommentList
-                commentList={replies}
-                isNested
-                currentUsername={currentUsername}
-                commentReducerFunc={commentReducerFunc}
-              />
+              <CommentList commentList={replies} isNested />
             </Fragment>
           );
         } else {
@@ -51,12 +42,10 @@ const CommentList = (props: Props) => {
             <Comment
               key={`${id}-comment`}
               {...comment}
-              currentUsername={currentUsername}
               popupState={popupIsActivated}
               replyingIds={replyingIds}
               onTogglePopup={setPopupIsActivated}
               onSetReplyingIds={setReplyingIds}
-              commentReducerFunc={commentReducerFunc}
             />
           );
         }

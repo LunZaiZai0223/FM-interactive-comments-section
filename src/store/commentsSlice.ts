@@ -106,7 +106,6 @@ const commentsSlice = createSlice({
       const { targetId } = action.payload;
       const decreaseScoreById = (comments: CommentItem[], targetId: number) => {
         for (const comment of comments) {
-          console.log('check', comment);
           if (comment.id === targetId) {
             comment.score -= 1;
             return;

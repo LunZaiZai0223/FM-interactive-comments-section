@@ -1,3 +1,6 @@
+import { useAppDispatch } from '../../../../store/utils';
+import { increaseScore, decreaseScore } from '../../../../store/commentsSlice';
+
 // components
 import Button from '../../../../UI/Button';
 
@@ -9,7 +12,7 @@ import { ReactComponent as PlusIcon } from '../../../../assets/icons/icon-plus.s
 import { ReactComponent as MinusIcon } from '../../../../assets/icons/icon-minus.svg';
 
 // interfaces
-import { Score } from '../../../RootLayout';
+import { Score } from '../../../../store/commentsSlice';
 
 const SCORE_ACTION_MAP = {
   increase: 1,
@@ -18,26 +21,20 @@ const SCORE_ACTION_MAP = {
 
 interface Props extends Score {
   commentId: number;
-  commentReducerFunc: Function;
 }
 
 const Rating = (props: Props) => {
-  const { score, commentId, commentReducerFunc } = props;
+  const { score, commentId } = props;
+  const dispatch = useAppDispatch();
 
   const handleUpdateScore = (scoreAction: number) => () => {
     switch (scoreAction) {
       case SCORE_ACTION_MAP.increase:
-        commentReducerFunc({
-          type: 'INCREASE_SCORE',
-          payload: { targetCommentId: commentId },
-        });
+        dispatch(increaseScore({ targetId: commentId }));
         break;
 
       case SCORE_ACTION_MAP.decrease:
-        commentReducerFunc({
-          type: 'DECREASE_SCORE',
-          payload: { targetCommentId: commentId },
-        });
+        dispatch(decreaseScore({ targetId: commentId }));
         break;
     }
   };

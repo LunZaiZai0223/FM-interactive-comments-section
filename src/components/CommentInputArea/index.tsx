@@ -12,14 +12,12 @@ interface Props {
   replyToUser?: string;
   targetCommentId?: number;
   onRemoveReplyId?: Function;
-  commentReducerFunc: Function;
 }
 
 const CommentInputArea = (props: Props) => {
   const {
     styleClasses = '',
     isReplying,
-    commentReducerFunc,
     replyToUser,
     targetCommentId,
     onRemoveReplyId,
@@ -31,7 +29,6 @@ const CommentInputArea = (props: Props) => {
         <Avatar userName="juliusomo" styleClasses={`${s['mobile-avatar']}`} />
         <CommentInput
           isReplying={isReplying}
-          commentReducerFunc={commentReducerFunc}
           replayToUser={replyToUser}
           targetCommentId={targetCommentId}
           onRemoveReplyId={onRemoveReplyId}

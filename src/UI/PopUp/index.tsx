@@ -7,9 +7,8 @@ import Button from '../Button';
 import s from './index.module.scss';
 
 interface Props {
-  targetCommentId: number;
   onTogglePopup: Function;
-  commentReducerFunc: Function;
+  onConfirm: Function;
 }
 
 const backDropContainerEle = document.getElementById(
@@ -17,15 +16,7 @@ const backDropContainerEle = document.getElementById(
 ) as HTMLDivElement;
 
 const Popup = (props: Props) => {
-  const { onTogglePopup, commentReducerFunc, targetCommentId } = props;
-
-  const handleConfirmDelete = () => {
-    commentReducerFunc({
-      type: 'DELETE_COMMENT',
-      payload: { targetCommentId: targetCommentId },
-    });
-    onTogglePopup();
-  };
+  const { onTogglePopup, onConfirm } = props;
 
   return ReactDOM.createPortal(
     <>
@@ -46,7 +37,7 @@ const Popup = (props: Props) => {
           </Button>
           <Button
             type="button"
-            onHandleClick={handleConfirmDelete}
+            onHandleClick={onConfirm}
             styleClasses={s.danger}
           >
             YES, DELETE

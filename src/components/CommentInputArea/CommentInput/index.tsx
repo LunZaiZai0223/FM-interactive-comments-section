@@ -1,4 +1,10 @@
 import { useEffect, useRef } from 'react';
+import { useAppDispatch } from '../../../store/utils';
+import {
+  addComment,
+  replyComment,
+  editComment,
+} from '../../../store/commentsSlice';
 
 // components
 import Button from '../../../UI/Button';
@@ -12,7 +18,6 @@ interface Props {
   initialValue?: string;
   targetCommentId?: number;
   replayToUser?: string;
-  commentReducerFunc: Function;
   onToggleIsEditing?: Function;
   onRemoveReplyId?: Function;
 }
@@ -20,7 +25,6 @@ interface Props {
 const CommentInput = (props: Props) => {
   const {
     isReplying,
-    commentReducerFunc,
     initialValue = '',
     isEditing,
     targetCommentId,
@@ -29,7 +33,9 @@ const CommentInput = (props: Props) => {
     onRemoveReplyId,
   } = props;
 
+  const dispatch = useAppDispatch();
   const enteredContentEle = useRef<HTMLTextAreaElement | null>(null);
+
   const placeHolderText = isEditing ? 'Editing comment...' : 'Add a comment...';
   const btnText = isReplying ? 'REPLY' : isEditing ? 'UPDATE' : 'SEND';
 
@@ -44,29 +50,26 @@ const CommentInput = (props: Props) => {
     const enteredContent = enteredContentEle.current?.value;
     if (enteredContent && enteredContent.trim().length > 0) {
       if (isEditing) {
-        commentReducerFunc({
-          type: 'EDIT_COMMENT',
-          payload: {
-            targetCommentId,
-            enteredContent: enteredContentEle.current?.value,
-          },
-        });
+        dispatch(
+          editComment({
+            editedCommentId: targetCommentId as number,
+            enteredComment: enteredContentEle.current!.value,
+          })
+        );
         onToggleIsEditing!();
       } else if (isReplying) {
-        commentReducerFunc({
-          type: 'REPLY_COMMENT',
-          payload: {
-            targetCommentId,
-            replyingTo: replayToUser,
-            enteredContent: enteredContentEle.current?.value,
-          },
-        });
+        dispatch(
+          replyComment({
+            repliedCommentId: targetCommentId as number,
+            replyingTo: replayToUser as string,
+            enteredContent: enteredContentEle.current!.value,
+          })
+        );
         onRemoveReplyId!();
       } else {
-        commentReducerFunc({
-          type: 'ADD_COMMENT',
-          payload: { enteredContent: enteredContentEle.current?.value },
-        });
+        dispatch(
+          addComment({ enteredContent: enteredContentEle.current!.value })
+        );
       }
       enteredContentEle.current!.value = '';
     }

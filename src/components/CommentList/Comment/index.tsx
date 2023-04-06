@@ -1,5 +1,8 @@
 import { useCallback, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../store/utils';
+import { deleteComment } from '../../../store/commentsSlice';
 
+// plugins
 import { formatDistanceToNow } from 'date-fns';
 
 // components
@@ -21,14 +24,13 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/icon-edit.svg'
 import s from './index.module.scss';
 
 // interfaces
-import { CommentItem } from '../../RootLayout';
+import { CommentItem } from '../../../store/commentsSlice';
 
 interface Props extends CommentItem {
   popupState: boolean;
   replyingIds: number[];
   onTogglePopup: Function;
   onSetReplyingIds: Function;
-  commentReducerFunc: Function;
   replyingTo?: string;
 }
 
@@ -39,25 +41,25 @@ const Comment = (props: Props) => {
     id,
     score,
     user,
-    currentUsername,
     popupState,
     replyingIds,
     onTogglePopup,
     onSetReplyingIds,
-    commentReducerFunc,
     replyingTo = '',
   } = props;
 
+  const dispatch = useAppDispatch();
+  const currentUser = useAppSelector((state) => state.currentUser);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const isCurrentUser = useCallback(
     (username: string) => {
-      return username === currentUsername;
+      return username === currentUser.username;
     },
-    [currentUsername]
+    [currentUser.username]
   );
 
-  const handleConfirmDelete = () => {
+  const handleTogglePopup = () => {
     onTogglePopup(!popupState);
   };
 
@@ -70,6 +72,15 @@ const Comment = (props: Props) => {
     return onSetReplyingIds(replyingIds.filter((id) => id !== targetId));
   };
 
+  const handleConfirmDelete = (deleteId: number) => () => {
+    dispatch(
+      deleteComment({
+        deleteId,
+      })
+    );
+    handleTogglePopup();
+  };
+
   return (
     <>
       <Card>
@@ -78,11 +89,7 @@ const Comment = (props: Props) => {
             score < 0 ? s['bad-comment'] : ''
           }`}
         >
-          <Rating
-            score={score}
-            commentReducerFunc={commentReducerFunc}
-            commentId={id}
-          />
+          <Rating score={score} commentId={id} />
           <div className={`${s['comment-info']}`}>
             <div className={`${s['comment-header']}`}>
               <div className={`${s['user-info']}`}>
@@ -102,7 +109,7 @@ const Comment = (props: Props) => {
                   <>
                     <Button
                       type="button"
-                      onHandleClick={handleConfirmDelete}
+                      onHandleClick={handleTogglePopup}
                       styleClasses={`${s['action-btn']} ${s.danger}`}
                     >
                       <DeleteIcon /> Delete
@@ -132,7 +139,6 @@ const Comment = (props: Props) => {
             {isEditing ? (
               <CommentInput
                 initialValue={content}
-                commentReducerFunc={commentReducerFunc}
                 isEditing
                 onToggleIsEditing={() => setIsEditing((prev) => !prev)}
                 targetCommentId={id}
@@ -147,7 +153,6 @@ const Comment = (props: Props) => {
         <CommentInputArea
           styleClasses={`${s['reply-container']}`}
           isReplying
-          commentReducerFunc={commentReducerFunc}
           replyToUser={user.username}
           targetCommentId={id}
           onRemoveReplyId={handleRemoveReplyId(id)}
@@ -155,9 +160,8 @@ const Comment = (props: Props) => {
       )}
       {popupState && (
         <Popup
-          onTogglePopup={handleConfirmDelete}
-          commentReducerFunc={commentReducerFunc}
-          targetCommentId={id}
+          onTogglePopup={handleTogglePopup}
+          onConfirm={handleConfirmDelete(id)}
         />
       )}
     </>

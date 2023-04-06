@@ -1,46 +1,205 @@
-# Getting Started with Create React App
+# Frontend Mentor - Interactive comments section solution
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a solution to the [Interactive comments section challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/interactive-comments-section-iG1RugEG9). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
 
-## Available Scripts
+## Table of contents
 
-In the project directory, you can run:
+- [Overview](#overview)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+- [My process](#my-process)
+  - [What I learned](#what-i-learned)
 
-### `npm start`
+## Overview
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Screenshot
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+![Screenshot 2023-04-06 at 20-20-03 React App](https://user-images.githubusercontent.com/77038018/230377026-5098fc91-8af3-47b2-ad11-b393b742a520.png)
 
-### `npm test`
+![Screenshot 2023-04-06 at 20-21-03 React App](https://user-images.githubusercontent.com/77038018/230377182-8904fb40-07d0-40c0-a717-0fa109dfb6a2.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Links
 
-### `npm run build`
+- Solution URL: [repo](https://github.com/LunZaiZai0223/FM-interactive-comments-section)
+- Live Site URL: [demo](https://lunzaizai0223.github.io/FM-interactive-comments-section/)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## My process
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### What I learned
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. recursive component
 
-### `npm run eject`
+```typescript
+const CommentList = (props: Props) => {
+ // ...
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  return (
+    <section className={`${s.container} ${isNested ? s['reply-list'] : ''}`}>
+      {commentList.map((comment) => {
+        const { id, replies } = comment;
+        // recursive 
+        if (replies && replies.length > 0) {
+          return (
+            // Fragment 可以塞 key，避免觸發 key 必須不同的錯誤
+            <Fragment key={id}>
+              <Comment
+                {...comment}
+                popupState={popupIsActivated}
+                replyingIds={replyingIds}
+                onTogglePopup={setPopupIsActivated}
+                onSetReplyingIds={setReplyingIds}
+              />
+              <CommentList commentList={replies} isNested />
+            </Fragment>
+          );
+        } else {
+          return (
+            <Comment
+              key={`${id}-comment`}
+              {...comment}
+              popupState={popupIsActivated}
+              replyingIds={replyingIds}
+              onTogglePopup={setPopupIsActivated}
+              onSetReplyingIds={setReplyingIds}
+            />
+          );
+        }
+      })}
+    </section>
+  );
+};
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. Redux toolkit
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```typescript
+// src/store/currentUserSlice.ts
+const currentUserSlice = createSlice({
+  name: 'currentUser',
+  initialState,
+  reducers: {},
+});
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+// src/store/commentsSlice.ts
+const commentsSlice = createSlice({
+  name: 'comments',
+  initialState,
+  reducers: {
+    deleteComment(state, action: PayloadAction<{ deleteId: number }>) {
+      const { deleteId } = action.payload;
+      const deleteById = (comments: CommentItem[], deleteId: number) => {
+        for (let i = 0; i < comments.length; i++) {
+          if (comments[i].id === deleteId) {
+            comments.splice(i, 1);
+            return;
+          }
 
-## Learn More
+          if (comments[i].replies && comments[i].replies!.length > 0) {
+            deleteById(comments[i].replies!, deleteId);
+          }
+        }
+      };
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+      deleteById(state, deleteId);
+      setLocalStorage(LOCAL_STORAGE_KEY, state);
+    },
+    increaseScore(state, action: PayloadAction<{ targetId: number }>) {
+      const { targetId } = action.payload;
+      const increaseScoreById = (comments: CommentItem[], targetId: number) => {
+        for (const comment of comments) {
+          if (comment.id === targetId) {
+            comment.score += 1;
+            return;
+          }
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+          if (comment.replies && comment.replies!.length > 0) {
+            increaseScoreById(comment.replies, targetId);
+          }
+        }
+      };
+
+      increaseScoreById(state, targetId);
+      setLocalStorage(LOCAL_STORAGE_KEY, state);
+    },
+    decreaseScore(state, action: PayloadAction<{ targetId: number }>) {
+      const { targetId } = action.payload;
+      const decreaseScoreById = (comments: CommentItem[], targetId: number) => {
+        for (const comment of comments) {
+          if (comment.id === targetId) {
+            comment.score -= 1;
+            return;
+          }
+
+          if (comment.replies && comment.replies!.length > 0) {
+            decreaseScoreById(comment.replies!, targetId);
+          }
+        }
+      };
+
+      decreaseScoreById(state, targetId);
+      setLocalStorage(LOCAL_STORAGE_KEY, state);
+    },
+    addComment(state, action: PayloadAction<{ enteredContent: string }>) {
+      const { enteredContent } = action.payload;
+      const newComment = generateComment({ isParent: true, enteredContent });
+      state.push(newComment);
+      setLocalStorage(LOCAL_STORAGE_KEY, state);
+    },
+    editComment(
+      state,
+      action: PayloadAction<{ editedCommentId: number; enteredComment: string }>
+    ) {
+      const { editedCommentId, enteredComment } = action.payload;
+      const editCommentById = (
+        comments: CommentItem[],
+        editedCommentId: number
+      ) => {
+        for (const comment of comments) {
+          if (comment.id === editedCommentId) {
+            comment.content = enteredComment;
+            return;
+          }
+
+          if (comment.replies && comment.replies!.length > 0) {
+            editCommentById(comment.replies, editedCommentId);
+          }
+        }
+      };
+
+      editCommentById(state, editedCommentId);
+      setLocalStorage(LOCAL_STORAGE_KEY, state);
+    },
+    replyComment(
+      state,
+      action: PayloadAction<{
+        repliedCommentId: number;
+        enteredContent: string;
+        replyingTo: string;
+      }>
+    ) {
+      const { repliedCommentId, enteredContent, replyingTo } = action.payload;
+      const repliedComment = generateComment({ enteredContent, replyingTo });
+      const replyById = (comments: CommentItem[], repliedCommentId: number) => {
+        for (const comment of comments) {
+          if (comment.id === repliedCommentId) {
+            comment.replies!.push(repliedComment);
+            return;
+          }
+
+          if (comment.replies && comment.replies.length > 0) {
+            for (const reply of comment.replies) {
+              if (reply.id === repliedCommentId) {
+                comment.replies.push(repliedComment);
+                return;
+              }
+            }
+          }
+        }
+      };
+
+      replyById(state, repliedCommentId);
+      setLocalStorage(LOCAL_STORAGE_KEY, state);
+    },
+  },
+});
+```
